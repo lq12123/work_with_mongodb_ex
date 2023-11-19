@@ -12,11 +12,25 @@ def checkNull(val: str) -> bool:
     return val in null_vals
 
 
-def replaceNullVals(entry: list) -> list:
+def replaceNullValsList(entry: list) -> list:
     for i in range(len(entry)):
         if checkNull(entry[i]):
             entry[i] = ""
     return entry
+
+
+def replaceNullValsDict(entry: dict) -> dict:
+    for keys, value in entry.items():
+        if checkNull(value):
+            entry[keys] = ""
+    return entry
+
+
+def replaceNullVals(entry: list | dict) -> list | dict:
+    if isinstance(entry, list):
+        return replaceNullValsList(entry)
+    else:
+        return replaceNullValsDict(entry)
 
 
 def loadDataToDB(fileName: str, dbName: str) -> None:
