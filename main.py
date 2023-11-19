@@ -39,6 +39,20 @@ def loadDataToDB(fileName: str, dbName: str) -> None:
                 idx += 1
 
 
+def csvToJson(fileName: str) -> None:
+    jsonArray = []
+
+    with open(fileName, encoding="utf-8") as csvf:
+        csvreader = csv.DictReader(csvf)
+
+        for row in csvreader:
+            jsonArray.append(row)
+
+    with open(f"{fileName.split('.')[0]}.json", "w", encoding="utf-8") as jsonf:
+        jsonString = json.dumps(jsonArray, indent=4)
+        jsonf.write(jsonString)
+
+
 def exportToJson(client: MongoClient, dbName: str, fileName: str) -> None:
     db = client[dbName]
     collection = db[dbName]
