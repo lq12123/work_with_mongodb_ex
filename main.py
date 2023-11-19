@@ -60,7 +60,7 @@ def csvToJson(fileName: str) -> None:
         csvreader = csv.DictReader(csvf)
 
         for row in csvreader:
-            jsonArray.append(row)
+            jsonArray.append(replaceNullVals(row))
 
     with open(f"{fileName.split('.')[0]}.json", "w", encoding="utf-8") as jsonf:
         jsonString = json.dumps(jsonArray, indent=4)
