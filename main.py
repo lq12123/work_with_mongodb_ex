@@ -1,6 +1,6 @@
 import csv
 import json
-import re
+from bson import json_util
 from pymongo import MongoClient
 from bson import json_util
 from pymongo.collection import Collection
@@ -75,6 +75,7 @@ def exportToJson(client: MongoClient, dbName: str, fileName: str) -> None:
               open(fileName, "w"))
 
 
+
 def importFromJson(client: MongoClient, dbName: str, fileName: str) -> None:
     db = client[dbName]
 
@@ -82,13 +83,9 @@ def importFromJson(client: MongoClient, dbName: str, fileName: str) -> None:
         return
 
     collection = db[dbName]
-    with open(fileName) as file:
-        bsondata = json.load(file)
-    
-    jsondata = re.sub(r'ObjectId\s*\(\s*\"(\S+)\"\s*\)',
-                      r'{"$oid": "\1"}',
-                      bsondata)
-    data = json.loads(jsondata, object_hook=json_util.object_hook)
+
+    with open(fileName, encoding="utf-8") as jsnf:
+        data = json_util.loads(jsnf.read())
 
     if isinstance(data, list):
         collection.insert_many(data)
@@ -139,7 +136,7 @@ with MongoClient(host="localhost", port=27017) as client:
                          {"region": "St. Petersburg"},
                          {"type": "architecture"}
                      ]
-                     }) 
+                     })
     for entry in result:
         print(entry)
     
