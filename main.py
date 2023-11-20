@@ -112,7 +112,7 @@ def printData(c, cnt=-1) -> None:
 
 
 with MongoClient(host="localhost", port=27017) as client:
-    loadDataToDB("tourist_attractions.csv", "tourist_attractions")
+    importFromJson(client, "tourist_attractions", "tourist_attractions.json")
 
     db = client["tourist_attractions"]
     collection = db["tourist_attractions"]
